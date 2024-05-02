@@ -5,12 +5,17 @@ require('dotenv').config();
 
 const PORT = 4000 || process.env.PORT;
 const app = express();
+
 const authRouter = require('./routes/auth.routes.js');
+const categoryRouter = require('./routes/category.routes');
+const tagRouter = require('./routes/tag.routes');
 
 app.use(express.json());
 app.use(cors());
 
 app.use('/api/auth', authRouter);
+app.use('/api/categories', categoryRouter);
+app.use('/api/tags', tagRouter);
 
 mongoose
   .connect(process.env.MONGO_LOCAL_URL)

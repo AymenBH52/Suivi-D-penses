@@ -3,20 +3,22 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   username: {
-    type: 'string',
+    type: String,
     required: true,
     unique: true,
   },
   email: {
-    type: 'string',
+    type: String,
     required: true,
     unique: true,
   },
   password: {
-    type: 'string',
+    type: String,
     required: true,
   },
 });
+
+userSchema.set('timestamps', true);
 
 userSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
