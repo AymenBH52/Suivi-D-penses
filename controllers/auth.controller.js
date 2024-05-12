@@ -7,7 +7,7 @@ const login = async (req, res, next) => {
   try {
     if (!username && !password)
       return res.status(400).json({ message: 'Content cannot be empty' });
-
+    
     const authUser = await user.findOne({ username });
 
     if (!authUser) {
