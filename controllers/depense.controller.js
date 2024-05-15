@@ -6,7 +6,6 @@ const createDepense = async (req, res, next) => {
   const newDepense = new Depense({
     montant,
     date,
-    category,
     description,
     userId,
     categoryId,
