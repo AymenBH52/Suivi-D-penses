@@ -2,6 +2,7 @@ const Depense = require('../models/depense');
 
 const createDepense = async (req, res, next) => {
   const { montant, date, description, userId, categoryId, tagId } =
+    req.body.depense;
   const newDepense = new Depense({
     montant,
     date,
