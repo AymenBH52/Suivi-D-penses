@@ -26,7 +26,6 @@ const getAllUserDepenses = async (req, res, next) => {
       .populate('userId')
       .populate('categoryId')
       .populate('tagId');
-
     res.status(200).json(userDepenses);
   } catch (e) {
     res.status(500).json({ message: e.message });
