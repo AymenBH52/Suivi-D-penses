@@ -1,15 +1,15 @@
 const Depense = require('../models/depense');
 
 const createDepense = async (req, res, next) => {
-  const { montant, date, category, description, userId, categoryId, tagId } = req.body;
-
+  const { montant, date, description, userId, categoryId, tagId } =
+    req.body.depense;
   const newDepense = new Depense({
     montant,
     date,
     description,
     userId,
     categoryId,
-    tagId
+    tagId,
   });
 
   try {
@@ -46,7 +46,7 @@ const updateDepense = async (req, res) => {
     const depense = await Depense.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true } // To return the updated document
+      { new: true }, // To return the updated document
     );
     if (!depense) {
       return res.status(404).json({ message: 'Depense not found' });
