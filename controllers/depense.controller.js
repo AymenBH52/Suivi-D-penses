@@ -22,7 +22,10 @@ const createDepense = async (req, res, next) => {
 
 const getAllUserDepenses = async (req, res, next) => {
   try {
-    const userDepenses = await Depense.find({ userId: req.params.userId });
+    const userDepenses = await Depense.find({ userId: req.params.userId })
+      .populate('userId')
+      .populate('categoryId')
+      .populate('tagId');
     res.status(200).json(userDepenses);
   } catch (e) {
     res.status(500).json({ message: e.message });
