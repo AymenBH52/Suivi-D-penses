@@ -7,7 +7,7 @@ const login = async (req, res, next) => {
   try {
     if (!username && !password)
       return res.status(400).json({ message: 'Content cannot be empty' });
-    
+
     const authUser = await user.findOne({ username });
 
     if (!authUser) {
@@ -41,6 +41,7 @@ const validateEmptyFields = (email, username, password) => {
 
 const register = async (req, res, next) => {
   const { username, password, email } = req.body;
+  console.log(req.body);
 
   if (validateEmptyFields(email, username, password) == false) {
     return res
@@ -60,11 +61,81 @@ const register = async (req, res, next) => {
         .json({ message: `User ${savedUser.username} created successfully` });
     })
     .catch((error) => {
-      res.status(500).json({ message: 'Username or email is already used!' });
+      res
+        .status(500)
+        .json({ error: error, message: 'Username or email is already used!' });
     });
 };
+let users;
+async () => {
+  console.log('aaa');
+  users = await User.find();
+};
+const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  let users = await user.find({ email: email });
+  if (users[email]) {
+    const token = crypto.randomBytes(20).toString('hex');
+    users[email].resetToken = token;
 
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_EMAIL,
+        pass: process.env.GMAIL_PASS,
+      },
+    });
+    const mailOptions = {
+      from: process.env.GMAIL_EMAIL,
+      to: email,
+      subject: 'Password Reset',
+      text: `Click the following link to reset your password: http://localhost:4200/reset-password/${token}`,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send('Error sending email');
+      } else {
+        console.log(`Email sent: ${info.response}`);
+        res
+          .status(200)
+          .send('Check your email for instructions on resetting your password');
+      }
+    });
+  } else {
+    res.status(404).send('Email not found');
+  }
+};
+// Route to handle the reset token
+const resetToken = async (req, res) => {
+  const { token } = req.params;
+  // Check if the token exists and is still valid
+  if (users.some((user) => user.resetToken === token)) {
+    // Render a form for the user to enter a new password
+    res.send(
+      '<form method="post" action="/reset-password"><input type="password" name="password" required><input type="submit" value="Reset Password"></form>',
+    );
+  } else {
+    res.status(404).send('Invalid or expired token');
+  }
+};
+// Route to update the password
+const resetPassword = (req, res) => {
+  const { token, password } = req.body;
+  // Find the user with the given token and update their password
+  const user = users.find((user) => user.resetToken === token);
+  if (user) {
+    user.password = password;
+    delete user.resetToken; // Remove the reset token after the password is updated
+    res.status(200).send('Password updated successfully');
+  } else {
+    res.status(404).send('Invalid or expired token');
+  }
+};
 module.exports = {
   login,
   register,
+  forgotPassword,
+  resetPassword,
+  resetToken,
 };
