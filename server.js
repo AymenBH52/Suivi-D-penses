@@ -16,7 +16,7 @@ app.use(cors());
 app.use('/api/auth', authRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/tags', tagRouter);
-app.use('depenses', depenseRouter);
+app.use('/api/depenses', depenseRouter);
 
 mongoose
   .connect('mongodb://127.0.0.1:27017/depenses')
