@@ -1,7 +1,7 @@
 const Tag = require('../models/tag.model');
 
 const createTag = async (req, res, next) => {
-  const { name, description, userId, color } = req.body;
+  const { name, description, userId, color } = req.body.tag;
 
   if (!name || !userId)
     return res.status(400).json({ message: 'Content cannot be empty' });

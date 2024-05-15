@@ -17,8 +17,9 @@ app.use('/api/auth', authRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/tags', tagRouter);
 app.use('depenses', depenseRouter);
+
 mongoose
-  .connect('mongodb://127.0.0.1:27017')
+  .connect('mongodb://127.0.0.1:27017/depenses')
   .then(() => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

@@ -14,6 +14,10 @@ const categorySchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  budget: {
+    type: String,
+    required: true,
+  },
 });
 
 categorySchema.set('timestamps', true);

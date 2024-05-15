@@ -1,7 +1,7 @@
 const Category = require('../models/category.model');
 
 const createCategory = async (req, res, next) => {
-  const { name, description, userId } = req.body;
+  const { name, description, userId, budget } = req.body.category;
 
   if (!name || !userId)
     return res.status(400).json({ message: 'Content cannot be empty' });
@@ -10,11 +10,12 @@ const createCategory = async (req, res, next) => {
     name,
     description,
     userId,
+    budget,
   });
 
   try {
     const cat = await newCategory.save();
-    res.status(201).json({ cat: cat });
+    res.status(201).json(cat);
   } catch (e) {
     res.status(400).json({ message: 'Category not created: ' + e.message });
   }

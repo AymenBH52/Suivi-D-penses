@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const semanticColors = ['#32CD32', '#FF4500', '#2962FF', '#FFFF00', '#FFD700'];
+const colorsEnum = ['#32CD32', '#FF4500', '#2962FF', '#FFFF00', '#FFD700'];
 
 const tagSchema = new mongoose.Schema({
   name: {
@@ -19,9 +19,9 @@ const tagSchema = new mongoose.Schema({
   color: {
     type: String,
     required: true,
-    enumerable: true,
-    enum: semanticColors.map((color) => color),
-    default: semanticColors[2],
+    //enumerable: true,
+    //enum: colorsEnum.map((color) => color),
+    default: colorsEnum[2],
   },
 });
 
