@@ -81,6 +81,41 @@ const deleteAllDepenses = async (req, res) => {
   }
 };
 
+
+// Filtrer les dépenses par période spécifique
+const filterDepensesByDateRange = async (req, res) => {
+  const { startDate, endDate, userId } = req.params;
+
+  try {
+    const depenses = await Depense.find({
+      date: { $gte: startDate, $lte: endDate },
+      userId: userId,
+    }).populate('categoryId').populate('tagId').populate('userId').exec();
+
+    res.status(200).json(depenses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+//Trier les transactions par montant
+const filterDepensesByMontant = async (req, res) => {
+  const { sortBy, userId  } = req.params;
+
+  try {
+    const depenses = await Depense.find({userId: userId } ).sort({ 
+      montant: sortBy == 'asc' ? 1 : -1,
+       
+      }).populate('categoryId').populate('tagId').populate('userId').exec();
+
+    res.status(200).json(depenses);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 module.exports = {
   createDepense,
   getAllUserDepenses,
@@ -88,4 +123,7 @@ module.exports = {
   updateDepense,
   deleteDepense,
   deleteAllDepenses,
+
+  filterDepensesByDateRange,
+  filterDepensesByMontant,
 };
